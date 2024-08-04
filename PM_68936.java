@@ -1,8 +1,7 @@
-import java.util.*;
 
-class Solution {
-
-    static int[] answer;
+public class PM_68936 {
+  
+  static int[] answer;
 
     /**
      * 쿼드 압축이 가능한지 확인하는 메서드
