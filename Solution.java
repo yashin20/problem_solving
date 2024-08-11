@@ -1,22 +1,39 @@
-//https://school.programmers.co.kr/learn/courses/30/lessons/12938
-//코딩테스트 연습 - 연습문제 - 최고의 집합
+//https://school.programmers.co.kr/learn/courses/30/lessons/43238
+//코딩테스트 연습 - 이분탐색 - 입국심사
+
 
 class Solution {
-    public int[] solution(int n, int s) {
+    public long solution(int n, int[] times) {
+        //배열의 최솟값 / 최댓값 찾기
+        int minTime = Integer.MAX_VALUE;
+        int maxTime = 0;
+        for (int time : times) {
+            if (time < minTime) {
+                minTime = time;
+            }
+            if (time > maxTime) {
+                maxTime = time;
+            }
+        }
 
-        int quotient = s / n; // 몫
-        int remainder = s % n; //나머지
+        long left = minTime;
+        long right = (long) n * maxTime;
+        long answer = right;
 
-        if (n > s) return new int[]{-1};
+        while (left <= right) {
+            
+            long mid = (left + right) / 2;
+            long total = 0; // mid 시간 동안 심사 가능한 사람 수
 
-        int[] answer = new int[n];
+            for (int time : times) {
+                total += mid / time;
+            }
 
-        for (int i = n - 1; i > -1; i--) {
-            if (remainder > 0) {
-                answer[i] = quotient + 1;
-                remainder --;
+            if (total >= n) {
+                answer = mid;
+                right = mid - 1;
             } else {
-                answer[i] = quotient;
+                left = mid + 1;
             }
         }
 
