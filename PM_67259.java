@@ -5,15 +5,14 @@ import java.util.*;
 
 class Solution {
 
-  //방향 벡터 (상, 하, 좌, 우) - x축 : 가로 - y축 : 세로
-  int[] dx = {0, 0, -1, 1};
-  int[] dy = {1, -1, 0, 0};
+  //방향 벡터 (상, 하, 좌, 우)
+  int[] dx = {-1, 1, 0, 0};
+  int[] dy = {0, 0, -1, 1};
 
   public int solution(int[][] board) {
+    int N = board.length;
 
-    int N = board.length; //좌표평면 사이즈
-
-    //방향별로 cost 저장할 배열(x, y, min cost)
+    //방향별로 비용을 저장할 배열 (x좌표, y좌표, 방향(상하좌우))
     int[][][] cost = new int[N][N][4];
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < N; j++) {
@@ -21,14 +20,17 @@ class Solution {
       }
     }
 
-    //BFS - Queue
+    //Queue
     Queue<int[]> q = new LinkedList<>();
 
-    //출발지 (0, 0) 초기화 + 출발지에서 상하좌우 탐색 큐에 추가
+    //출발지(0, 0) 초기화 
     for (int i = 0; i < 4; i++) {
       cost[0][0][i] = 0;
+      //{x좌표, y좌표, 이동방향, 최소비용} 초기값 Queue에 투입
+      //출발지 (0,0) 에서 4방향 (0, 1, 2, 3) 으로 출발
       q.offer(new int[]{0, 0, i, 0});
     }
+
 
     //BFS 탐색
     while (!q.isEmpty()) {
@@ -42,13 +44,12 @@ class Solution {
         int nx = x + dx[i];
         int ny = y + dy[i];
 
-        //가고자 하는 곳이 접근 가능한 곳인가?
+        //범위 안에 존재하는가
         if (nx >= 0 && ny >= 0 && nx < N && ny < N && board[nx][ny] == 0) {
 
-          //직선 건설비용
           int newCost = currentCost + 100;
 
-          //기존 방향과 다름 : 곡선 건설비용 추가
+          //기존방향과 다른방향 -> 곡선비용 추가
           if (direction != i) {
             newCost += 500;
           }
@@ -62,7 +63,7 @@ class Solution {
       }
     }
 
-    //4방향 중에서 최솟값 구하기
+    //4방향중 최솟값 도출
     return Math.min(Math.min(cost[N-1][N-1][0], cost[N-1][N-1][1]), 
                     Math.min(cost[N-1][N-1][2], cost[N-1][N-1][3]));
   }
